@@ -96,6 +96,39 @@ app.get('/restaurants/:restaurant_id', (req, res) => {
     .then(restaurant => res.render('show', { restaurant }))
     .catch(error => console.log(error))
 })
+
+// 設定編輯頁的路由
+app.get('/restaurants/:restaurant_id/edit', (req, res) => {
+  const restaurant_id = req.params.restaurant_id
+
+  Restaurant.findById(restaurant_id)
+    .lean()
+    .then(restaurant => res.render('edit', { restaurant }))
+    .catch(error => console.log(error))
+})
+
+// 設定送出編輯的路由
+app.post('/restaurants/:restaurant_id/edit', (req, res) => {
+  const restaurant_id = req.params.restaurant_id
+
+  return Restaurant.findById(restaurant_id)
+    .then(restaurant => {
+      restaurant.id = req.body.restaurant_id
+      restaurant.name = req.body.name
+      restaurant.name_en = req.body.name_en
+      restaurant.category = req.body.category
+      restaurant.image = req.body.image
+      restaurant.location = req.body.location
+      restaurant.phone = req.body.phone
+      restaurant.google_map = req.body.google_map
+      restaurant.rating = req.body.rating
+      restaurant.description = req.body.description
+      return restaurant.save()
+    })
+    .then(() => res.redirect(`/restaurants/${restaurant_id}`))
+    .catch(error => console.log(error))
+})
+
 // 設定啟動伺服器相關
 app.listen(port, () => {
   console.log(`Express is listening on localhost:${port}`)
