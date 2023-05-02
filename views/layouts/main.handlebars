@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Lists</title>
+  {{!-- 導入 Bootstrap--}}
+  <link rel="stylesheet" href="/stylesheets/bootstrap.css">
+  {{!-- 導入Font Awesome 且需要另外將fa-solid-900.ttf和woff2安裝到/webfonts --}}
+  <link rel="stylesheet" href="/stylesheets/all.min.css">
+  {{!-- Layout的CSS --}}
+  <link rel="stylesheet" href="/stylesheets/main.css">
+</head>
+
+<body>
+  <header>
+    <!-- navigation -->
+    <nav class="navbar navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <img src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/6227/restaurant-list-logo.png"
+            width="30" height="30" class="d-inline-block align-top" alt="我的餐廳清單">
+          我的餐廳清單
+        </a>
+      </div>
+    </nav>
+    <div class="banner"></div>
+  </header>
+
+  {{{body}}}
+
+  {{!-- 導入 Popper.js--}}
+  <script src="/javascripts/popper.js"></script>
+  {{!-- 導入 Bootstrap.js--}}
+  <script src="/javascripts/bootstrap.js"></script>
+</body>
+
+</html>
