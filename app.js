@@ -6,8 +6,8 @@ const port = 3000
 const exphbs = require('express-handlebars')
 // 載入Mongoose
 const mongoose = require('mongoose')
-// 載入JSON檔
-const restaurantsList = require('./restaurant.json')
+// 載入JSON檔改成載入種子資料
+const Restaurant = require('./models/restaurant')
 
 // dotenv設定
 if (process.env.MONGODB_URI !== 'production') {
@@ -34,7 +34,10 @@ app.use(express.static('public'))
 
 // 設定首頁的路由
 app.get('/', (req, res) => {
-  res.render('index', { restaurants: restaurantsList.results })
+  Restaurant.find()
+    .lean()
+    .then(restaurants => res.render('index', { restaurants }))
+    .catch(error => console.log(error))
 })
 // 設定說明頁的路由
 app.get('/restaurants/:restaurant_id', (req, res) => {
