@@ -4,9 +4,27 @@ const app = express()
 const port = 3000
 // 載入Express-habdlebars
 const exphbs = require('express-handlebars')
+// 載入Mongoose
+const mongoose = require('mongoose')
 // 載入JSON檔
 const restaurantsList = require('./restaurant.json')
 
+// dotenv設定
+if (process.env.MONGODB_URI !== 'production') {
+  require('dotenv').config()
+}
+// Mongoose連線設定
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+// 資料庫連線狀態
+const db = mongoose.connection
+// error
+db.on('error', () => {
+  console.log('mongodb error!')
+})
+// connect
+db.once('open', () => {
+  console.log('mongodb connect!')
+})
 // handlebars設定 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
