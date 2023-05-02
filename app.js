@@ -35,6 +35,7 @@ app.use(express.static('public'))
 
 // bodyParser設定
 app.use(bodyParser.urlencoded({ extended: true }))
+
 // 設定首頁的路由
 app.get('/', (req, res) => {
   Restaurant.find()
@@ -42,27 +43,25 @@ app.get('/', (req, res) => {
     .then(restaurants => res.render('index', { restaurants }))
     .catch(error => console.log(error))
 })
-// 設定說明頁的路由
-// app.get('/restaurants/:restaurant_id', (req, res) => {
-//   const restaurant_id = req.params.restaurant_id
-//   const restaurant = restaurantsList.results.find(restaurant => {
-//     return restaurant.id.toString() === restaurant_id
-//   })
-//   res.render('show', { restaurant: restaurant })
-// })
-// // 設定查詢頁的路由
-// app.get('/search', (req, res) => {
-//   const keyword = req.query.keyword
-//   // 若空白搜尋，轉成首頁的路由
-//   if (!keyword.trim()) {
-//     return res.redirect("/")
-//   }
-  
-//   const restaurants = restaurantsList.results.filter(restaurant => {
-//     return restaurant.name.trim().toLowerCase().includes(keyword.trim().toLowerCase()) || restaurant.category.trim().toLowerCase().includes(keyword.trim().toLowerCase())
-//   })
-//   res.render('index', { restaurants: restaurants, keyword: keyword })
-// })
+
+// 設定查詢頁的路由
+app.get('/search', (req, res) => {
+  const keyword = req.query.keyword
+  // 若空白搜尋，轉成首頁的路由
+  if (!keyword.trim()) {
+    return res.redirect("/")
+  }
+  // mongoose查詢: 用or連接兩個查詢條件，i為不分大小寫
+  Restaurant.find({
+    $or: [
+      { name: { $regex: new RegExp(keyword, 'i') } },
+      { category: { $regex: new RegExp(keyword, 'i') } }
+    ]
+  })
+    .lean()
+    .then(restaurants => res.render('index', { restaurants, keyword }))
+    .catch(error => console.log(error))
+})
 // 新增頁 (NOTE: 新增頁要在DETAIL之前)
 app.get('/restaurants/new', (req, res) => {
   return res.render('new')
@@ -84,6 +83,15 @@ app.post('/restaurants', (req, res) => {
   })
     .then(() => res.redirect('/')) // 新增完成後導回首頁
     .catch(error => console.log(error))
+})
+
+// 設定說明頁的路由
+app.get('/restaurants/:restaurant_id', (req, res) => {
+  const restaurant_id = req.params.restaurant_id
+  const restaurant = restaurantsList.results.find(restaurant => {
+    return restaurant.id.toString() === restaurant_id
+  })
+  res.render('show', { restaurant: restaurant })
 })
 // 設定啟動伺服器相關
 app.listen(port, () => {
