@@ -2,6 +2,14 @@
 <div class="container">
   <div class="row">
     <div class="col-12 col-md-10 mx-auto">
+      
+      <div class="mb-2 d-flex justify-content-start">
+        <a href="/" class="btn btn-outline-success btn-sm ms-2 me-2">Back</a>
+        <a href="/restaurants/{{restaurant._id}}/edit" class="btn btn-outline-primary btn-sm">Edit</a>
+        <form action="/restaurants/{{restaurant._id}}/delete" method="POST">
+          <button type="submit" class="btn btn-outline-danger btn-sm ms-2">Delete</button>
+        </form>
+      </div>
 
       <p class="mb-1">
         <span class="text-secondary">
@@ -34,8 +42,7 @@
         {{restaurant.description}}
       </p>
 
-      <img class="rounded mx-auto d-block mb-4 w-100"
-        src="{{restaurant.image}}" alt="{{restaurant.name}}"
+      <img class="rounded mx-auto d-block mb-4 w-100" src="{{restaurant.image}}" alt="{{restaurant.name}}"
         style="max-width: 600px;">
     </div>
   </div>

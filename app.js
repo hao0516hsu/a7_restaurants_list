@@ -62,11 +62,13 @@ app.get('/search', (req, res) => {
     .then(restaurants => res.render('index', { restaurants, keyword }))
     .catch(error => console.log(error))
 })
-// 新增頁 (NOTE: 新增頁要在DETAIL之前)
+
+// 設定新增功能的路由 (NOTE: 新增頁要在SHOW之前)
 app.get('/restaurants/new', (req, res) => {
   return res.render('new')
 })
 
+// 設定送出新增的路由
 app.post('/restaurants', (req, res) => {
   const restaurant = req.body
   return Restaurant.create({
@@ -88,10 +90,11 @@ app.post('/restaurants', (req, res) => {
 // 設定說明頁的路由
 app.get('/restaurants/:restaurant_id', (req, res) => {
   const restaurant_id = req.params.restaurant_id
-  const restaurant = restaurantsList.results.find(restaurant => {
-    return restaurant.id.toString() === restaurant_id
-  })
-  res.render('show', { restaurant: restaurant })
+
+  Restaurant.findById(restaurant_id)
+    .lean()
+    .then(restaurant => res.render('show', { restaurant }))
+    .catch(error => console.log(error))
 })
 // 設定啟動伺服器相關
 app.listen(port, () => {
