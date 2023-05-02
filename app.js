@@ -129,6 +129,16 @@ app.post('/restaurants/:restaurant_id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
+// 設定刪除的路由
+app.post('/restaurants/:restaurant_id/delete', (req, res) => {
+  const restaurant_id = req.params.restaurant_id
+
+  return Restaurant.findById(restaurant_id)
+    .then(restaurant => restaurant.remove())
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+})
+
 // 設定啟動伺服器相關
 app.listen(port, () => {
   console.log(`Express is listening on localhost:${port}`)
